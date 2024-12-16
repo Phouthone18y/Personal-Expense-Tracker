@@ -55,11 +55,10 @@ class GraphFrame(tk.Frame):
         positive_amounts = [daily_positive_sums.get(date, 0) for date in all_dates]
         negative_amounts = [daily_negative_sums.get(date, 0) for date in all_dates]
 
-        self.ax.bar(all_dates, positive_amounts, label='ລາຍຮັບ', color='skyblue')
+        self.ax.bar(all_dates, positive_amounts, label='ລາຍຮັບ', color='blue')
         self.ax.bar(all_dates, negative_amounts, label='ລາຍຈ່າຍ', color='red')
 
         self.ax.set_xlabel('ວັນ')
-        self.ax.set_ylabel('ຈຳນວນເງິນ (ກີບ)')
         self.ax.set_title(f'ລາຍຮັບລາຍຈ່າຍສຳລັບເດືອນ: {month_name[self.data_manager.current_month]}')
         self.ax.set_xticks(all_dates)
         self.ax.legend()
