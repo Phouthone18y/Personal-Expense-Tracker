@@ -1,7 +1,6 @@
 import json
 import datetime
 
-
 class DataManager:
     def __init__(self):
         self.entries = []
@@ -10,36 +9,35 @@ class DataManager:
         self.data_file = "account_data.json"
         self.load_data()
 
-
     def add_entry(self, date, amount, note):
         date_str = date.strftime("%Y-%m-%d")
         self.entries.append((date_str, amount, note))
         self.save_data()
         self.notify_observers()
 
-
     def delete_entry(self, date, amount, note):
-        entry_to_remove = (date, amount, note)
-        if entry_to_remove in self.entries:
-            self.entries.remove(entry_to_remove)
-            self.save_data()
-            self.notify_observers()
+        entry_to_remove = (date, amount, str(note)) # Modified line
+        for entry in self.entries:
+           date_str, amount_str, note_str = entry
+           if date_str == date and amount_str == amount and str(note_str) == str(note): # Modified line
+                self.entries.remove(entry)
+                self.save_data()
+                self.notify_observers()
+                return
 
 
     def update_entry(self, old_date_str, old_amount, old_note, new_date, new_amount, new_note):
         new_date_str = new_date.strftime("%Y-%m-%d")
         for i, (date_str, amount, note) in enumerate(self.entries):
             if date_str == old_date_str and amount == old_amount and note == old_note:
-               self.entries[i] = (new_date_str, new_amount, new_note)
-               self.save_data()
-               self.notify_observers()
-               return
-
+                self.entries[i] = (new_date_str, new_amount, new_note)
+                self.save_data()
+                self.notify_observers()
+                return
 
     def filter_data(self, month):
         self.current_month = month
         self.notify_observers()
-
 
     def get_filtered_data(self):
         if self.current_month == "ທັງໝົດ":
@@ -54,11 +52,9 @@ class DataManager:
                 print(f"ຮູບແບບວັນທີບໍ່ຖືກຕ້ອງ: {date_str}")
         return filtered
 
-
     def notify_observers(self):
         for observer in self.observers:
             observer()
-
 
     def save_data(self):
         new_entries = []
@@ -70,7 +66,6 @@ class DataManager:
                 print(f"ຈຳນວນເງິນບໍ່ຖືກຕ້ອງສຳລັບການບັນທຶກ: {amount}")
         with open(self.data_file, 'w') as f:
             json.dump(new_entries, f, indent=4)
-
 
     def load_data(self):
         try:
