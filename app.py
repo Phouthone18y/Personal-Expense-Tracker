@@ -29,35 +29,31 @@ class App(tk.Tk):
     def create_widgets(self):
         # Input Frame
         self.input_frame = InputFrame(self, self.data_manager)
-        self.input_frame.grid(row=0, column=0, sticky="ew")
+        self.input_frame.grid(row=0, column=0, sticky="w")
 
         # Table Frame
         self.table_frame = TableFrame(self, self.data_manager, self.input_frame)
-        self.table_frame.grid(row=1, column=0, sticky="nsew",)
+        self.table_frame.grid(row=1, column=0)
 
         # Graph Frame
         self.graph_frame = GraphFrame(self, self.data_manager)
-        self.graph_frame.grid(row=0, column=1, rowspan=3)
+        self.graph_frame.grid(row=0, column=1, rowspan=2)
 
 
         # Summary Frame
         self.summary_frame = SummaryFrame(self, self.data_manager)
-        self.summary_frame.grid(row=2, column=0,sticky="ew")
+        self.summary_frame.grid(row=2, column=0, sticky="w")
 
-        # Configure grid weights for responsive resizing
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(1, weight=1)
 
         self.input_frame.master = self
         self.table_frame.master = self
 
     def on_window_click(self, event):
-        if event.widget not in (self.table_frame.tree,
-                                *self.input_frame.winfo_children(),
-                                 self.table_frame.delete_button): # Modified line
-            self.table_frame.deselect_item()
-
+        if hasattr(self, 'table_frame'): # Modified line
+           if event.widget not in (self.table_frame.tree,
+                                    *self.input_frame.winfo_children(),
+                                     self.table_frame.delete_button):
+                self.table_frame.deselect_item()
 
 if __name__ == "__main__":
     app = App()
